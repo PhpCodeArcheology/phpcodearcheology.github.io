@@ -1,0 +1,19 @@
+{
+  "name": "phpcodearcheology-website",
+  "version": "0.1.0",
+  "description": "The website for PhpCodeArcheology",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PhpCodeArcheology/phpcodearcheology.github.io.git"
+  },
+  "author": "Marcus Kober",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PhpCodeArcheology/phpcodearcheology.github.io/issues"
+  },
+  "homepage": "https://phpcodearcheology.github.io",
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}
