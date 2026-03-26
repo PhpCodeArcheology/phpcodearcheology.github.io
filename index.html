@@ -1,13 +1,769 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <title>PhpCodeArcheology</title>
-        <link href="./output.css" rel="stylesheet">
-    </head>
-    <body class="bg-fuchsia-100 text-base p-4">
-        <h1 class="text-3xl font-bold mb-4">PhpCodeArcheology</h1>
-        <p class="text-xl"><strong>Coming soon ...</strong></p>
-    </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhpCodeArcheology — PHP Static Analysis for Architecture &amp; Maintainability</title>
+  <meta name="description" content="60+ architecture metrics, 14 problem detectors, 6 report formats, and a built-in MCP server for AI-native code intelligence. Open source PHP static analysis tool." />
+  <link rel="canonical" href="https://phpcodearcheology.github.io/" />
+  <meta name="author" content="Marcus Kober" />
+  <meta name="keywords" content="PHP static analysis, PHP code metrics, PHP code quality, PHP architecture analysis, PHP maintainability, PHP complexity analysis, cyclomatic complexity, code smell detection, PHP refactoring" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://phpcodearcheology.github.io/" />
+  <meta property="og:title" content="PhpCodeArcheology — PHP Static Analysis for Architecture &amp; Maintainability" />
+  <meta property="og:description" content="60+ architecture metrics, 14 problem detectors, 6 report formats, and a built-in MCP server for AI-native code intelligence. Open source PHP static analysis tool." />
+  <meta property="og:image" content="https://phpcodearcheology.github.io/assets/img/og-image.png" />
+  <meta property="og:site_name" content="PhpCodeArcheology" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="PhpCodeArcheology — PHP Static Analysis for Architecture &amp; Maintainability" />
+  <meta name="twitter:description" content="60+ architecture metrics, 14 problem detectors, 6 report formats, and a built-in MCP server for AI-native code intelligence. Open source PHP static analysis tool." />
+  <meta name="twitter:image" content="https://phpcodearcheology.github.io/assets/img/og-image.png" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PhpCodeArcheology",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "url": "https://phpcodearcheology.github.io/",
+    "author": { "@type": "Person", "name": "Marcus Kober" },
+    "license": "https://opensource.org/licenses/MIT",
+    "programmingLanguage": "PHP",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "PHP static analysis tool measuring 60+ architecture and maintainability metrics, detecting 14 problem patterns, and generating reports in 6 formats including HTML, JSON, SARIF, and Markdown."
+  }
+  </script>
+
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="assets/img/favicon-32.png" type="image/png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="assets/img/favicon-180.png" sizes="180x180" />
+
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <script>
+    (function(){var s=localStorage.getItem('theme');var t=s||'auto';if(t==='auto')t=window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark';document.documentElement.setAttribute('data-theme',t);document.documentElement.setAttribute('data-theme-setting',s||'auto')})();
+  </script>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<header class="navbar">
+  <div class="site-container">
+    <a href="#" class="navbar-brand brand-name font-oswald" aria-label="PhpCodeArcheology home">PhpCodeArcheology</a>
+
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a href="#features" class="navbar-link">Features</a>
+      <a href="#quickstart" class="navbar-link">Quick Start</a>
+      <button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+        <svg data-icon="auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <svg data-icon="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg data-icon="dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+      <a href="https://github.com/PhpCodeArcheology/PhpCodeArcheology" target="_blank" rel="noopener noreferrer" class="navbar-github">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+        <span class="navbar-github-star">★ Star</span>
+      </a>
+    </nav>
+
+    <button id="ham-btn" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobile-nav">
+      <span class="ham-line ham-top"></span>
+      <span class="ham-line ham-mid"></span>
+      <span class="ham-line ham-bot"></span>
+    </button>
+  </div>
+
+  <div id="mobile-nav" role="navigation" aria-label="Mobile navigation">
+    <a href="#features">Features</a>
+    <a href="#quickstart">Quick Start</a>
+    <a href="https://github.com/PhpCodeArcheology/PhpCodeArcheology" target="_blank" rel="noopener noreferrer" class="mobile-nav-accent">★ GitHub</a>
+    <div class="mobile-theme-row">
+      <button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+        <svg data-icon="auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <svg data-icon="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg data-icon="dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+      <span class="theme-label" id="theme-label">Auto</span>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-glow" aria-hidden="true"></div>
+
+  <div class="site-container">
+    <!-- Eyebrow badge -->
+    <div class="hero-badge-wrap">
+      <span class="hero-badge">
+        <span class="eyebrow">PHP Static Analysis</span>
+        <span class="hero-badge-sep"></span>
+        <span class="eyebrow">v2.x</span>
+        <span class="hero-badge-sep"></span>
+        <span class="eyebrow">PHP 8.2+</span>
+      </span>
+    </div>
+
+    <!-- Headline -->
+    <h1 class="hero-headline">
+      Understand Your<br><span class="hero-headline-accent">PHP Codebase.</span>
+    </h1>
+
+    <!-- Sub-headline -->
+    <p class="hero-sub">
+      Architecture, maintainability, structural health — 60+ metrics across files, classes, and methods,
+      for the PHP projects you actually have to maintain long-term.
+    </p>
+
+    <!-- Install command -->
+    <div class="hero-install">
+      <span class="hero-install-prompt">$</span>
+      <code id="install-cmd" class="hero-install-code">composer require --dev php-code-archeology/php-code-archeology</code>
+      <button class="copy-btn" onclick="copyInstall(this)" title="Copy to clipboard" aria-label="Copy install command">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+    </div>
+
+    <!-- CTAs -->
+    <div class="hero-ctas">
+      <a href="#quickstart" class="hero-cta-primary">Get Started</a>
+      <a href="https://github.com/PhpCodeArcheology/PhpCodeArcheology" target="_blank" rel="noopener noreferrer" class="hero-cta-secondary">View on GitHub</a>
+    </div>
+
+    <!-- Trust signals -->
+    <p class="hero-trust">
+      MIT License &nbsp;&middot;&nbsp; PHP 8.2&ndash;8.5 &nbsp;&middot;&nbsp; Composer &nbsp;&middot;&nbsp; No extensions required
+    </p>
+  </div>
+</section>
+
+
+<!-- ═══════════════ STATS BAR ═══════════════ -->
+<section class="stats">
+  <div class="site-container">
+    <div class="stats-grid">
+
+      <div class="stat-item">
+        <div class="stat-number">60+</div>
+        <div class="eyebrow stat-label">Metrics</div>
+      </div>
+
+      <div class="stats-divider"></div>
+
+      <div class="stat-item">
+        <div class="stat-number">6</div>
+        <div class="eyebrow stat-label">Report Formats</div>
+      </div>
+
+      <div class="stats-divider"></div>
+
+      <div class="stat-item stat-item--wide">
+        <div class="stat-number">14</div>
+        <div class="eyebrow stat-label">Problem Detectors</div>
+        <div class="stat-sublabel">God Class, Dead Code&hellip;</div>
+      </div>
+
+      <div class="stats-divider"></div>
+
+      <div class="stat-item">
+        <div class="stat-number stat-number--sm">8.2&ndash;8.5</div>
+        <div class="eyebrow stat-label">PHP Versions</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════ FEATURES ═══════════════ -->
+<section id="features" class="section">
+  <div class="site-container">
+    <div class="section-header">
+      <div class="eyebrow">What it does</div>
+      <h2 class="section-title">Everything your codebase needs<br>measured and reported.</h2>
+    </div>
+
+    <div class="features-grid">
+
+      <!-- 60+ Metrics -->
+      <div class="panel feature-card fade-in">
+        <div class="feature-icon" aria-hidden="true">📐</div>
+        <h3 class="feature-title">60+ Architecture Metrics</h3>
+        <p class="feature-desc">
+          Cyclomatic complexity, cognitive complexity, maintainability index, LCOM, Halstead metrics, instability, coupling, type coverage — measured per file, class, method, and function. The HTML report includes a full glossary with formulas, thresholds, and interpretation guidelines.
+        </p>
+        <div class="feature-badges">
+          <span class="badge badge-cyan">WMC</span>
+          <span class="badge badge-cyan">LCOM</span>
+          <span class="badge badge-cyan">CBO</span>
+          <span class="badge badge-cyan">DIT</span>
+          <span class="badge badge-cyan">+56 more</span>
+        </div>
+      </div>
+
+      <!-- 14 Problem Detectors -->
+      <div class="panel feature-card fade-in">
+        <div class="feature-icon" aria-hidden="true">🔍</div>
+        <h3 class="feature-title">14 Problem Detectors</h3>
+        <p class="feature-desc">
+          God classes, too-complex methods, dead code, circular dependencies, deep inheritance trees — automatically flagged with error/warning/info severity and actionable descriptions.
+        </p>
+        <div class="feature-badges">
+          <span class="badge badge-red">error</span>
+          <span class="badge badge-yellow">warning</span>
+          <span class="badge badge-blue">info</span>
+        </div>
+      </div>
+
+      <!-- 6 Report Formats -->
+      <div class="panel feature-card fade-in">
+        <div class="feature-icon" aria-hidden="true">📊</div>
+        <h3 class="feature-title">6 Report Formats</h3>
+        <p class="feature-desc">
+          One analysis. Six outputs. Interactive HTML dashboard, Markdown for wikis, JSON for CI pipelines, SARIF for GitHub Code Scanning, AI-optimised summary, and Knowledge Graph for graph databases.
+        </p>
+        <div class="feature-badges">
+          <span class="badge badge-cyan">HTML</span>
+          <span class="badge badge-cyan">Markdown</span>
+          <span class="badge badge-cyan">JSON</span>
+          <span class="badge badge-cyan">SARIF</span>
+          <span class="badge badge-cyan">AI</span>
+          <span class="badge badge-cyan">Graph</span>
+        </div>
+      </div>
+
+      <!-- Test Coverage -->
+      <div class="panel feature-card fade-in">
+        <div class="feature-icon" aria-hidden="true">🧪</div>
+        <h3 class="feature-title">Test Coverage Integration</h3>
+        <p class="feature-desc">
+          Auto-detects PHPUnit, Pest, and Codeception. Maps test files to production classes by namespace and naming convention. Ingests Clover XML for line-level coverage data alongside architecture metrics.
+        </p>
+      </div>
+
+      <!-- Framework Detection -->
+      <div class="panel feature-card fade-in">
+        <div class="feature-icon" aria-hidden="true">⚙️</div>
+        <h3 class="feature-title">Framework-Aware Analysis</h3>
+        <p class="feature-desc">
+          Reads your <code class="code-inline">composer.json</code> to detect Symfony, Laravel, and Doctrine — then adjusts metric thresholds and exclusion rules automatically. No false positives from framework boilerplate.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════ WHAT SETS IT APART ═══════════════ -->
+<section class="section-bordered">
+  <div class="site-container">
+
+    <div class="section-header">
+      <div class="eyebrow">What Sets It Apart</div>
+      <h2 class="section-title">Not just another linter.</h2>
+      <p class="section-intro">
+        Static analysis tools measure complexity. <span class="brand-name brand-name-bold">PhpCodeArcheology</span> understands architecture.
+      </p>
+    </div>
+
+    <!-- Row 1: MCP Server — visual left on desktop, text first in DOM for mobile -->
+    <div class="alt-row visual-left fade-in">
+      <div class="row-text">
+        <div class="eyebrow row-eyebrow">MCP Server</div>
+        <h3 class="row-title">Talk to your codebase.</h3>
+        <p class="row-desc">
+          PhpCodeArcheology ships with a built-in MCP (Model Context Protocol) server. Connect it to Claude, Cursor, or any MCP-compatible client and query your architecture with natural language — hotspots, dependency graphs, health scores, refactoring priorities.
+        </p>
+        <p class="row-desc">
+          <strong class="row-desc-accent">PhpCodeArcheology is the first PHP static analysis tool with native MCP support.</strong>
+        </p>
+        <p class="row-desc">
+          The tool also generates a <code class="code-inline">CLAUDE.md</code> — a structured project overview your AI coding assistant can read before touching the codebase. Because the AI should probably know what it's working with.
+        </p>
+      </div>
+      <div class="row-visual">
+        <div class="terminal terminal-mb">
+          <div class="terminal-heading">MCP Tool Calls</div>
+          <div><span class="prompt">❯ </span><span class="cmd">get_hotspots</span> <span class="label">{"limit": 5, "min_complexity": 15}</span></div>
+          <div><span class="prompt">❯ </span><span class="cmd">get_refactoring_priorities</span> <span class="label">{"threshold": "high"}</span></div>
+          <div><span class="prompt">❯ </span><span class="cmd">get_impact_analysis</span> <span class="label">{"class": "OrderService"}</span></div>
+          <div><span class="prompt">❯ </span><span class="cmd">get_dependencies</span> <span class="label">{"depth": 2}</span></div>
+        </div>
+        <div class="terminal">
+          <div class="terminal-heading terminal-heading-sm">Setup</div>
+          <div><span class="prompt">$ </span><span class="cmd">claude mcp add phpcodearcheology \</span></div>
+          <div class="terminal-indent"><span class="cmd">-- vendor/bin/phpcodearcheology mcp</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2: Knowledge Graph — text left -->
+    <div class="alt-row text-left fade-in">
+      <div class="row-text">
+        <div class="eyebrow row-eyebrow">Knowledge Graph</div>
+        <h3 class="row-title">Your codebase as a graph.</h3>
+        <p class="row-desc">
+          Export your entire codebase as a graph — classes as nodes, dependencies as edges. Import into Neo4j, Obsidian, or your own tooling. Spot architectural clusters, dead zones, and coupling hotspots visually.
+        </p>
+      </div>
+      <div class="row-visual">
+        <div class="panel graph-visual">
+          <svg viewBox="0 0 320 200" class="graph-svg" aria-label="Abstract node graph illustration" role="img">
+            <g stroke="rgba(255,255,255,0.1)" stroke-width="1.5" fill="none">
+              <line x1="160" y1="100" x2="80" y2="48"/>
+              <line x1="160" y1="100" x2="242" y2="48"/>
+              <line x1="160" y1="100" x2="75" y2="158"/>
+              <line x1="160" y1="100" x2="244" y2="158"/>
+              <line x1="80" y1="48" x2="38" y2="98"/>
+              <line x1="242" y1="48" x2="288" y2="98"/>
+              <line x1="75" y1="158" x2="128" y2="184"/>
+              <line x1="244" y1="158" x2="198" y2="184"/>
+              <line x1="80" y1="48" x2="130" y2="18"/>
+              <line x1="160" y1="100" x2="160" y2="48"/>
+            </g>
+            <g stroke="rgba(6,182,212,0.4)" stroke-width="1.5" fill="none">
+              <line x1="160" y1="100" x2="80" y2="48"/>
+              <line x1="160" y1="100" x2="244" y2="158"/>
+            </g>
+            <circle cx="160" cy="100" r="11" fill="#0e7490" stroke="#06b6d4" stroke-width="2"/>
+            <circle cx="80" cy="48" r="7" fill="rgba(8,51,68,0.9)" stroke="#06b6d4" stroke-width="1.5"/>
+            <circle cx="242" cy="48" r="6" fill="rgba(8,51,68,0.9)" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
+            <circle cx="75" cy="158" r="6" fill="rgba(8,51,68,0.9)" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>
+            <circle cx="244" cy="158" r="8" fill="rgba(8,51,68,0.9)" stroke="#06b6d4" stroke-width="1.5"/>
+            <circle cx="38" cy="98" r="5" fill="rgba(8,51,68,0.9)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+            <circle cx="288" cy="98" r="5" fill="rgba(8,51,68,0.9)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+            <circle cx="128" cy="184" r="4" fill="rgba(8,51,68,0.9)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+            <circle cx="198" cy="184" r="4" fill="rgba(8,51,68,0.9)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+            <circle cx="130" cy="18" r="4" fill="rgba(8,51,68,0.9)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+            <circle cx="160" cy="48" r="5" fill="rgba(8,51,68,0.9)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3: Test Analysis — visual left on desktop, text first in DOM for mobile -->
+    <div class="alt-row visual-left fade-in">
+      <div class="row-text">
+        <div class="eyebrow row-eyebrow">Test Intelligence</div>
+        <h3 class="row-title">Find your untested hotspots.</h3>
+        <p class="row-desc">
+          Auto-detects PHPUnit, Pest, and Codeception. Maps test files to production classes by namespace and naming convention. Feed in a Clover XML file and get line-level coverage overlaid on architecture metrics — so you know which complex, high-coupling classes have no test coverage.
+        </p>
+      </div>
+      <div class="row-visual">
+        <div class="panel">
+          <table class="data-table">
+            <thead>
+              <tr><th>Class</th><th>Coverage</th><th>Tests</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>UserService</td><td><span class="badge badge-green">94%</span></td><td class="text-secondary">12 tests</td></tr>
+              <tr><td>OrderProcessor</td><td><span class="badge badge-yellow">67%</span></td><td class="text-secondary">8 tests</td></tr>
+              <tr><td class="text-danger">PaymentService</td><td><span class="badge badge-red">0%</span></td><td class="text-secondary">—</td></tr>
+              <tr><td>InvoiceGenerator</td><td><span class="badge badge-yellow">51%</span></td><td class="text-secondary">4 tests</td></tr>
+              <tr><td>AuthMiddleware</td><td><span class="badge badge-green">88%</span></td><td class="text-secondary">6 tests</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 4: Framework Detection — text left -->
+    <div class="alt-row text-left fade-in">
+      <div class="row-text">
+        <div class="eyebrow row-eyebrow">Framework Detection</div>
+        <h3 class="row-title">Knows what it's looking at.</h3>
+        <p class="row-desc row-desc-mb">
+          Reads your <code class="code-inline">composer.json</code> to detect Symfony, Laravel, and Doctrine — then adjusts metric thresholds and exclusion rules automatically.
+        </p>
+        <div class="feature-badges">
+          <span class="badge badge-purple">Symfony</span>
+          <span class="badge badge-laravel">Laravel</span>
+          <span class="badge badge-doctrine">Doctrine</span>
+          <span class="badge badge-muted">More planned</span>
+        </div>
+      </div>
+      <div class="row-visual">
+        <div class="terminal">
+          <div class="terminal-heading">composer.json detection</div>
+          <div><span class="key">"require"</span><span class="label">: {</span></div>
+          <div class="terminal-indent"><span class="key">"symfony/framework-bundle"</span><span class="label">: </span><span class="val">"^7.0"</span><span class="label">,</span></div>
+          <div class="terminal-indent"><span class="key">"doctrine/orm"</span><span class="label">: </span><span class="val">"^3.0"</span></div>
+          <div><span class="label">}</span></div>
+          <div class="auto-detected">↓ Auto-Detected</div>
+          <div class="detected-item"><span class="val">✓</span> <span class="label">Symfony: LCOM threshold relaxed</span></div>
+          <div><span class="val">✓</span> <span class="label">Doctrine: Entity coupling excluded</span></div>
+          <div><span class="val">✓</span> <span class="label">Controllers: complexity adjusted</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 5: Git Churn — text left -->
+    <div class="alt-row text-left fade-in">
+      <div class="row-text">
+        <div class="eyebrow row-eyebrow">Git Churn Analysis</div>
+        <h3 class="row-title">Find the hot zones.</h3>
+        <p class="row-desc">
+          Classes that change constantly and score high on complexity are your real maintenance risks. Cross-reference commit frequency with architecture metrics to surface the files that demand the most attention — before they become emergencies.
+        </p>
+      </div>
+      <div class="row-visual">
+        <div class="panel">
+          <table class="data-table">
+            <thead>
+              <tr><th>Class</th><th>Commits</th><th>WMC</th><th>Risk</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>OrderService</td>
+                <td class="text-faint">47</td>
+                <td class="text-faint">38</td>
+                <td><span class="risk-label risk-high">HIGH</span></td>
+              </tr>
+              <tr>
+                <td>UserRepository</td>
+                <td class="text-faint">31</td>
+                <td class="text-faint">22</td>
+                <td><span class="risk-label risk-med">MED</span></td>
+              </tr>
+              <tr>
+                <td>PaymentGateway</td>
+                <td class="text-faint">28</td>
+                <td class="text-faint">19</td>
+                <td><span class="risk-label risk-med">MED</span></td>
+              </tr>
+              <tr>
+                <td>EventDispatcher</td>
+                <td class="text-faint">12</td>
+                <td class="text-faint">8</td>
+                <td><span class="risk-label risk-low">LOW</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 6: Health Score — visual left on desktop, text first in DOM for mobile -->
+    <div class="alt-row visual-left fade-in">
+      <div class="row-text">
+        <div class="eyebrow row-eyebrow">Health Score</div>
+        <h3 class="row-title">One number. The whole picture.</h3>
+        <p class="row-desc">
+          The Health Score distills complexity, coupling, cohesion, test coverage, and churn into a single 0–100 score — so you can answer "how healthy is this codebase?" without a spreadsheet. Track it over time to validate that refactoring efforts are actually working.
+        </p>
+      </div>
+      <div class="row-visual">
+        <div class="panel health-score-panel">
+          <div class="health-score-number">74</div>
+          <div class="health-score-suffix">/ 100</div>
+          <span class="badge badge-yellow health-score-badge">Needs Attention</span>
+          <div class="health-score-bars">
+            <div class="health-bar-row">
+              <span class="health-bar-label">Complexity</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" style="width:61%;background:linear-gradient(90deg,rgba(6,182,212,0.6),#06b6d4);"></div></div>
+              <span class="health-bar-value">61</span>
+            </div>
+            <div class="health-bar-row">
+              <span class="health-bar-label">Coupling</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" style="width:82%;background:linear-gradient(90deg,rgba(134,239,172,0.6),#86efac);"></div></div>
+              <span class="health-bar-value">82</span>
+            </div>
+            <div class="health-bar-row">
+              <span class="health-bar-label">Test Coverage</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" style="width:43%;background:linear-gradient(90deg,rgba(252,165,165,0.6),#fca5a5);"></div></div>
+              <span class="health-bar-value">43</span>
+            </div>
+            <div class="health-bar-row">
+              <span class="health-bar-label">Churn Risk</span>
+              <div class="mini-bar-track"><div class="mini-bar-fill" style="width:78%;background:linear-gradient(90deg,rgba(253,224,71,0.6),#fde047);"></div></div>
+              <span class="health-bar-value">78</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 7: Baseline + Compare — full-width compact panel -->
+    <div class="fade-in">
+      <div class="also-included-wrap">
+        <span class="also-included-pill">Also included</span>
+      </div>
+      <div class="baseline-strip baseline-strip-padded">
+        <div class="baseline-grid">
+          <!-- Baseline -->
+          <div>
+            <div class="eyebrow">Baseline Management</div>
+            <h3 class="baseline-h3">Save a snapshot. Compare later.</h3>
+            <p class="baseline-desc">
+              Track metric drift over time. Save a baseline after a cleanup sprint and run it again in a month to see exactly what changed.
+            </p>
+            <div class="baseline-diffs">
+              <span class="baseline-diff baseline-diff-down">↓ WMC 38 → 31</span>
+              <span class="baseline-diff baseline-diff-up">↑ CBO 12 → 17</span>
+            </div>
+          </div>
+          <!-- Compare -->
+          <div class="compare-border lg-border-left">
+            <div class="eyebrow">Compare Mode</div>
+            <h3 class="baseline-h3">Two runs. Side by side.</h3>
+            <p class="baseline-desc">
+              Run the analysis on two branches or two points in time and get a structured diff of every metric that changed.
+            </p>
+            <div class="terminal terminal-sm">
+              <span class="prompt">$ </span><span class="cmd">phpcodearcheology --compare=baseline.json src/</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════ QUICK START ═══════════════ -->
+<section id="quickstart" class="section-bordered">
+  <div class="site-container">
+    <div class="section-header">
+      <div class="eyebrow">Quick Start</div>
+      <h2 class="section-title">Up and running in minutes.</h2>
+    </div>
+
+    <div class="quickstart">
+
+      <!-- Step 1 -->
+      <div class="step fade-in">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-label">Install via Composer</div>
+          <div class="terminal terminal-row">
+            <code class="terminal-code">composer require --dev php-code-archeology/php-code-archeology</code>
+            <button class="copy-btn" onclick="copyText(this,'composer require --dev php-code-archeology/php-code-archeology')" title="Copy" aria-label="Copy command">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step fade-in">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-label">Run the analysis</div>
+          <div class="terminal terminal-row">
+            <code class="terminal-code">php vendor/bin/phpcodearcheology src/</code>
+            <button class="copy-btn" onclick="copyText(this,'php vendor/bin/phpcodearcheology src/')" title="Copy" aria-label="Copy command">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+          </div>
+          <p class="step-output">Output: <code>tmp/report/html/</code></p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step fade-in">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-label">
+            With test coverage <span class="step-optional">(optional)</span>
+          </div>
+          <div class="terminal">
+            <div><span class="prompt">$ </span><span class="cmd">XDEBUG_MODE=coverage vendor/bin/phpunit \</span></div>
+            <div class="terminal-indent"><span class="cmd">--coverage-clover clover.xml</span></div>
+            <div class="step-mt"><span class="prompt">$ </span><span class="cmd">php vendor/bin/phpcodearcheology \</span></div>
+            <div class="terminal-indent"><span class="cmd">--coverage-file clover.xml src/</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step fade-in">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-label">
+            Quick terminal output <span class="step-optional">(CI-friendly)</span>
+          </div>
+          <div class="terminal terminal-row">
+            <code class="terminal-code">php vendor/bin/phpcodearcheology --quick src/</code>
+            <button class="copy-btn" onclick="copyText(this,'php vendor/bin/phpcodearcheology --quick src/')" title="Copy" aria-label="Copy command">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="docs-link-wrap">
+      <a href="https://github.com/PhpCodeArcheology/PhpCodeArcheology" target="_blank" rel="noopener noreferrer" class="docs-link">
+        Full documentation on GitHub
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+</main>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="site-container">
+    <div class="footer-grid">
+
+      <!-- Brand -->
+      <div>
+        <div class="brand-name font-oswald footer-brand">PhpCodeArcheology</div>
+        <p class="footer-desc">
+          PHP static analysis for architecture and maintainability. Open source, MIT licensed.
+        </p>
+      </div>
+
+      <!-- Links -->
+      <div>
+        <div class="footer-heading">Links</div>
+        <ul class="footer-links">
+          <li><a href="https://github.com/PhpCodeArcheology/PhpCodeArcheology" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub Repository</a></li>
+          <li><a href="https://packagist.org/packages/php-code-archeology/php-code-archeology" target="_blank" rel="noopener noreferrer" class="footer-link">Packagist</a></li>
+          <li><a href="https://github.com/PhpCodeArcheology/PhpCodeArcheology/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer" class="footer-link">Changelog</a></li>
+          <li><a href="https://github.com/PhpCodeArcheology/PhpCodeArcheology/issues/new" target="_blank" rel="noopener noreferrer" class="footer-link">Report an Issue</a></li>
+        </ul>
+      </div>
+
+      <!-- Built With -->
+      <div>
+        <div class="footer-heading">Built With</div>
+        <ul class="footer-tech">
+          <li class="footer-tech-item">PHP 8.2+ · nikic/php-parser</li>
+          <li class="footer-tech-item">Twig · Tailwind CSS</li>
+          <li class="footer-tech-item">logiscape/mcp-sdk-php</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2025 Marcus Kober &middot; MIT License</span>
+      <div class="footer-bottom-links">
+        <a href="legal.html" class="footer-bottom-link">Legal Notice</a>
+        <a href="privacy.html" class="footer-bottom-link">Privacy Policy</a>
+        <span class="badge badge-cyan">PHP 8.2+</span>
+        <a href="https://github.com/PhpCodeArcheology/PhpCodeArcheology" target="_blank" rel="noopener noreferrer" class="footer-bottom-link">GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  // Hamburger menu
+  const hamBtn = document.getElementById('ham-btn');
+  const mobileNav = document.getElementById('mobile-nav');
+
+  function openNav() {
+    mobileNav.classList.add('open');
+    hamBtn.classList.add('open');
+    hamBtn.setAttribute('aria-expanded', 'true');
+  }
+  function closeNav() {
+    mobileNav.classList.remove('open');
+    hamBtn.classList.remove('open');
+    hamBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  hamBtn.addEventListener('click', () => {
+    mobileNav.classList.contains('open') ? closeNav() : openNav();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeNav();
+  });
+
+  mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+
+  // Copy-to-clipboard
+  const CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  const COPY_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+
+  function flashCheck(btn) {
+    btn.innerHTML = CHECK_SVG;
+    btn.style.color = '#86efac';
+    setTimeout(() => { btn.innerHTML = COPY_SVG; btn.style.color = ''; }, 2000);
+  }
+
+  function copyInstall(btn) {
+    const text = document.getElementById('install-cmd').textContent;
+    navigator.clipboard.writeText(text).then(() => flashCheck(btn)).catch(() => {});
+  }
+
+  function copyText(btn, text) {
+    navigator.clipboard.writeText(text).then(() => flashCheck(btn)).catch(() => {});
+  }
+
+  // Scroll fade-in
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+  // Theme toggle
+  (function(){
+    var html = document.documentElement;
+    var btns = document.querySelectorAll('.theme-toggle');
+    var label = document.getElementById('theme-label');
+    var order = ['auto','light','dark'];
+    var labels = {auto:'Auto', light:'Light', dark:'Dark'};
+
+    function applyTheme(setting) {
+      var theme = setting;
+      if (setting === 'auto') {
+        theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      }
+      html.setAttribute('data-theme', theme);
+      html.setAttribute('data-theme-setting', setting);
+      localStorage.setItem('theme', setting);
+      btns.forEach(function(btn) { updateIcon(btn, setting); });
+      if (label) label.textContent = labels[setting];
+    }
+
+    function updateIcon(btn, setting) {
+      btn.querySelectorAll('[data-icon]').forEach(function(svg) {
+        svg.style.display = svg.getAttribute('data-icon') === setting ? 'block' : 'none';
+      });
+      btn.setAttribute('aria-label', 'Theme: ' + setting + '. Click to change.');
+    }
+
+    btns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var current = html.getAttribute('data-theme-setting') || 'auto';
+        var next = order[(order.indexOf(current) + 1) % 3];
+        applyTheme(next);
+      });
+    });
+
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function() {
+      if ((html.getAttribute('data-theme-setting') || 'auto') === 'auto') {
+        applyTheme('auto');
+      }
+    });
+
+    // Initialize icons on load
+    var s = html.getAttribute('data-theme-setting') || 'auto';
+    btns.forEach(function(btn) { updateIcon(btn, s); });
+    if (label) label.textContent = labels[s];
+  })();
+</script>
+</body>
 </html>
